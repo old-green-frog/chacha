@@ -30,13 +30,11 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 	user.Status = 1
 
 	//Installing data
-	sel, err := db.Query(fmt.Sprintf("SELECT login, password FROM Users WHERE login='%s' AND password='%s'", user.Name, user.Password))
+	err := db.QueryRow(fmt.Sprintf("SELECT login, password FROM Users WHERE login='%s' AND password='%s'", user.Name, user.Password)).Scan()
 	if err != nil {
 		user.Status = 0
-		panic(err)
+		fmt.Println(err)
 	}
-
-	defer sel.Close()
 
 	tmpl, _ := template.ParseFiles("../../templates/root.html")
 	tmpl.Execute(w, user)
