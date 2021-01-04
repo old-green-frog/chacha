@@ -9,6 +9,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+var (
+	//					   add your user:password@/base
+	db, _ = sql.Open("mysql", "gotest:gotest@/simple")
+)
+
 //User structure
 type User struct {
 	Name     string
@@ -24,16 +29,8 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 	user.Password = r.FormValue("password")
 	user.Status = 1
 
-	//					   add your user:password@/base
-	db, err := sql.Open("mysql", "gotest:gotest@/start")
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
-
 	//Installing data
-	sel, err := db.Query(fmt.Sprintf("SELECT `logn`, `passwd` FROM Users WHERE `logn` LIKE '%s' AND `passwd` LIKE '%s';", user.Name, user.Password))
+	sel, err := db.Query(fmt.Sprintf("SELECT login, password FROM Users WHERE login='%s' AND password='%s'", user.Name, user.Password))
 	if err != nil {
 		user.Status = 0
 		panic(err)
@@ -51,6 +48,9 @@ func rootPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	defer db.Close()
+
 	http.HandleFunc("/", rootPage)
 	http.HandleFunc("/postform", postPage)
 	http.ListenAndServe(":8000", nil)
