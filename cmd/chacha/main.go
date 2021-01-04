@@ -31,9 +31,8 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 
 	//Installing data
 	err := db.QueryRow(fmt.Sprintf("SELECT login, password FROM Users WHERE login='%s' AND password='%s'", user.Name, user.Password)).Scan()
-	if err != nil {
+	if err == sql.ErrNoRows {
 		user.Status = 0
-		fmt.Println(err)
 	}
 
 	tmpl, _ := template.ParseFiles("../../templates/root.html")
