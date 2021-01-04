@@ -6,10 +6,7 @@ USE simple;
 CREATE TABLE Users (
 
     login VARCHAR(20) PRIMARY KEY,
-    password VARCHAR(20) CHECK( password != "" ),
-    name VARCHAR(20),
-    age INT,
-    gender VARCHAR(20) 
+    password VARCHAR(20) CHECK( password != "" )
 
 );
 
