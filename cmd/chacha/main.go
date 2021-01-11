@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
 	//					   add your user:password@/base
-	db, _ = sql.Open("mysql", "gotest:gotest@/simple")
+	db, _ = sql.Open("mysql", "mysql:mysql@/start")
 )
 
 //User structure
@@ -25,8 +26,8 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 
 	user := User{}
 
-	user.Name = r.FormValue("login")
-	user.Password = r.FormValue("password")
+	user.Name = strings.Trim(r.FormValue("login"), " ")
+	user.Password = strings.Trim(r.FormValue("password"), " ")
 	user.Status = 1
 
 	//Installing data
@@ -50,5 +51,5 @@ func main() {
 
 	http.HandleFunc("/", rootPage)
 	http.HandleFunc("/postform", postPage)
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":8080", nil)
 }
