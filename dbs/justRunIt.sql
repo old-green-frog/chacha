@@ -1,7 +1,6 @@
-DROP DATABASE simple;
-CREATE DATABASE simple;
+CREATE DATABASE start;
 
-USE simple;
+USE start;
 
 CREATE TABLE Users (
 
